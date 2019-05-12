@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import './App.css';
-import Routes from './routes'
-import { blue, indigo } from '@material-ui/core/colors'
+import React, { Component } from "react";
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import "./App.css";
+import Routes from "./routes";
+import { blue, indigo } from "@material-ui/core/colors";
+import StoreProvider from "./components/StoreProvider";
 
 const theme = createMuiTheme({
   palette: {
@@ -15,24 +16,20 @@ const theme = createMuiTheme({
   },
   typography: {
     // Use the system font instead of the default Roboto font.
-    fontFamily: [
-      '"Lato"',
-      'sans-serif'
-    ].join(',')
+    fontFamily: ['"Lato"', "sans-serif"].join(",")
   }
 });
 
-
-class App extends Component {
-  render() {
-    return (
-      <div>
+const App = ({ store }) => {
+  return (
+    <div>
+      <StoreProvider store={store}>
         <MuiThemeProvider theme={theme}>
           <Routes />
         </MuiThemeProvider>
-      </div>
-    );
-  }
-}
+      </StoreProvider>
+    </div>
+  );
+};
 
 export default App;

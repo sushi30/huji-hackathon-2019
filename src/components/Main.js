@@ -214,4 +214,4 @@ class Main extends Component {
   }
 }
 
-export default withRouter(withStyles(styles)(Main));
+export default  withRouter(withStyles(styles)(Main));
