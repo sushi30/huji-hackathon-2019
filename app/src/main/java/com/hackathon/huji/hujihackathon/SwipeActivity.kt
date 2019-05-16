@@ -47,6 +47,12 @@ class SwipeActivity : AppCompatActivity(), CardStackListener {
     }
 
     override fun onCardSwiped(direction: Direction) {
+        if (direction == Direction.Left){
+            // set group false
+            // add group to never show again!
+        } else if (direction == Direction.Right){
+            // send swipe right API
+        }
         Log.d("CardStackView", "onCardSwiped: p = ${manager.topPosition}, d = $direction")
         if (manager.topPosition == adapter.itemCount - 5) {
             paginate()

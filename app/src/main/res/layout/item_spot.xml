@@ -20,16 +20,6 @@
             android:scaleType="centerCrop"
             app:riv_corner_radius="8dp"/>
 
-    <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" android:baselineAligned="false">
-        <fragment android:name="com.hackathon.huji.hujihackathon.GroupViewFragment"
-                  android:id="@+id/fragment_container"
-                  android:layout_weight="1"
-                  android:layout_width="0dp"
-                  android:layout_height="match_parent"/>
-    </LinearLayout>
 
     <LinearLayout
             android:orientation="vertical"

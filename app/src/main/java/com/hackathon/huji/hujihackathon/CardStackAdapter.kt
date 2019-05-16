@@ -8,27 +8,24 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
-import android.support.v7.app.AppCompatActivity
-
+import com.hackathon.huji.hujihackathon.R
 
 class CardStackAdapter(
     private var spots: List<Spot> = emptyList()
 ) : RecyclerView.Adapter<CardStackAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val activity = parent.context as AppCompatActivity
-        val fragment = GroupViewFragment()
-        val fragmentManager = activity.supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.fragment_container, fragment)
-        fragmentTransaction.commit()
-
         val inflater = LayoutInflater.from(parent.context)
         return ViewHolder(inflater.inflate(R.layout.item_spot, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val spot = spots[position]
+        holder.name.text = "${spot.id}. ${spot.name}"
+        holder.city.text = spot.city
+        Glide.with(holder.image)
+            .load(spot.url)
+            .into(holder.image)
         holder.itemView.setOnClickListener { v ->
             Toast.makeText(v.context, spot.name, Toast.LENGTH_SHORT).show()
         }
@@ -47,6 +44,9 @@ class CardStackAdapter(
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val name: TextView = view.findViewById(R.id.item_name)
+        var city: TextView = view.findViewById(R.id.item_city)
+        var image: ImageView = view.findViewById(R.id.item_image)
     }
 
 }
