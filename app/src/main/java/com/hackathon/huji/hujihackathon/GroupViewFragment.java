@@ -1,47 +1,48 @@
 package com.hackathon.huji.hujihackathon;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import java.util.List;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link GroupView.OnFragmentInteractionListener} interface
+ * {@link GroupViewFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link GroupView#newInstance} factory method to
+ * Use the {@link GroupViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GroupView extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+public class GroupViewFragment extends Fragment {
+    // the fragment initialization parameters
     private static final String GROUP_ID = "id";
 
-    // TODO: Rename and change types of parameters
     private String id;
+    private SwipingViewModel viewModel;
 
     private OnFragmentInteractionListener mListener;
 
-    public GroupView() {
+    public GroupViewFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment GroupView.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static GroupView newInstance(String param1, String param2) {
-        GroupView fragment = new GroupView();
+    public static GroupViewFragment newInstance(String param1, String param2) {
+        GroupViewFragment fragment = new GroupViewFragment();
         Bundle args = new Bundle();
         args.putString(GROUP_ID, param1);
         fragment.setArguments(args);
@@ -51,6 +52,9 @@ public class GroupView extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FragmentActivity activity = getActivity();
+        if (activity == null) return;
+        viewModel = ViewModelProviders.of(activity).get(SwipingViewModel.class);
         if (getArguments() != null) {
             id = getArguments().getString(GROUP_ID);
         }
@@ -60,7 +64,24 @@ public class GroupView extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_group_view, container, false);
+        final View layout = inflater.inflate(R.layout.fragment_group_view, container, false);
+        TextView groupName = layout.findViewById(R.id.group_name);
+        Group group = viewModel.getGroupById(groupName.getText().toString());
+        groupName.setText(group.getName().getValue());
+        group.getMembers().observe(this, new Observer<List<User>>() {
+            @Override
+            public void onChanged(@Nullable List<User> users) {
+                if (users == null) return;
+                for (User user : users) {
+                    LinearLayout linearLayout = layout.findViewById(R.id.mainLayout);
+                    TextView textView = new TextView(GroupViewFragment.this.getContext());
+                    textView.setText(user.getName());
+                    linearLayout.addView(textView);
+                }
+            }
+        });
+
+        return layout;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
