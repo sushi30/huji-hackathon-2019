@@ -39,7 +39,8 @@
 
         <me.gujun.android.taggroup.TagGroup
                 android:id="@+id/tag_group"
-                style="@style/TagGroup"/>
+                style="@style/TagGroup"
+                app:atg_textSize="16sp"/>
     </LinearLayout>
 
     <FrameLayout
