@@ -14,10 +14,10 @@ import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.TextView
 import com.yuyakaido.android.cardstackview.*
-import com.yuyakaido.android.cardstackview.sample.CardStackAdapter
-import com.yuyakaido.android.cardstackview.sample.Spot
-import com.yuyakaido.android.cardstackview.sample.SpotDiffCallback
+import java.lang.StringBuilder
 import java.util.*
+
+const val LOG_TAG = "SwipeActivity"
 
 class SwipeActivity : AppCompatActivity(), CardStackListener {
 
@@ -62,13 +62,13 @@ class SwipeActivity : AppCompatActivity(), CardStackListener {
     }
 
     override fun onCardAppeared(view: View, position: Int) {
-        val textView = view.findViewById<TextView>(R.id.item_name)
-        Log.d("CardStackView", "onCardAppeared: ($position) ${textView.text}")
+//        val textView = view.findViewById<TextView>(R.id.item_name)
+        Log.d("CardStackView", "onCardAppeared:")
     }
 
     override fun onCardDisappeared(view: View, position: Int) {
-        val textView = view.findViewById<TextView>(R.id.item_name)
-        Log.d("CardStackView", "onCardDisappeared: ($position) ${textView.text}")
+//        val textView = view.findViewById<TextView>(R.id.item_name)
+        Log.d("CardStackView", "onCardDisappeared:")
     }
 
     private fun setupNavigation() {
@@ -97,10 +97,10 @@ class SwipeActivity : AppCompatActivity(), CardStackListener {
         val skip = findViewById<View>(R.id.skip_button)
         skip.setOnClickListener {
             val setting = SwipeAnimationSetting.Builder()
-                    .setDirection(Direction.Left)
-                    .setDuration(Duration.Normal.duration)
-                    .setInterpolator(AccelerateInterpolator())
-                    .build()
+                .setDirection(Direction.Left)
+                .setDuration(Duration.Normal.duration)
+                .setInterpolator(AccelerateInterpolator())
+                .build()
             manager.setSwipeAnimationSetting(setting)
             cardStackView.swipe()
         }
@@ -108,10 +108,10 @@ class SwipeActivity : AppCompatActivity(), CardStackListener {
         val rewind = findViewById<View>(R.id.rewind_button)
         rewind.setOnClickListener {
             val setting = RewindAnimationSetting.Builder()
-                    .setDirection(Direction.Bottom)
-                    .setDuration(Duration.Normal.duration)
-                    .setInterpolator(DecelerateInterpolator())
-                    .build()
+                .setDirection(Direction.Bottom)
+                .setDuration(Duration.Normal.duration)
+                .setInterpolator(DecelerateInterpolator())
+                .build()
             manager.setRewindAnimationSetting(setting)
             cardStackView.rewind()
         }
@@ -119,10 +119,10 @@ class SwipeActivity : AppCompatActivity(), CardStackListener {
         val like = findViewById<View>(R.id.like_button)
         like.setOnClickListener {
             val setting = SwipeAnimationSetting.Builder()
-                    .setDirection(Direction.Right)
-                    .setDuration(Duration.Normal.duration)
-                    .setInterpolator(AccelerateInterpolator())
-                    .build()
+                .setDirection(Direction.Right)
+                .setDuration(Duration.Normal.duration)
+                .setInterpolator(AccelerateInterpolator())
+                .build()
             manager.setSwipeAnimationSetting(setting)
             cardStackView.swipe()
         }
@@ -152,6 +152,10 @@ class SwipeActivity : AppCompatActivity(), CardStackListener {
     private fun paginate() {
         val old = adapter.getSpots()
         val new = old.plus(createSpots())
+        Log.d(
+            LOG_TAG,
+            StringBuilder().append("paginate: ").append("old: ").append(old.toString()).append("new: ").append(new.toString()).toString()
+        )
         val callback = SpotDiffCallback(old, new)
         val result = DiffUtil.calculateDiff(callback)
         adapter.setSpots(new)
@@ -257,24 +261,54 @@ class SwipeActivity : AppCompatActivity(), CardStackListener {
 
     private fun createSpot(): Spot {
         return Spot(
-                name = "Yasaka Shrine",
-                city = "Kyoto",
-                url = "https://source.unsplash.com/Xq1ntWruZQI/600x800"
+            name = "Yasaka Shrine",
+            city = "Kyoto",
+            url = "https://source.unsplash.com/Xq1ntWruZQI/600x800"
         )
     }
 
     private fun createSpots(): List<Spot> {
         val spots = ArrayList<Spot>()
         spots.add(Spot(name = "Yasaka Shrine", city = "Kyoto", url = "https://source.unsplash.com/Xq1ntWruZQI/600x800"))
-        spots.add(Spot(name = "Fushimi Inari Shrine", city = "Kyoto", url = "https://source.unsplash.com/NYyCqdBOKwc/600x800"))
+        spots.add(
+            Spot(
+                name = "Fushimi Inari Shrine",
+                city = "Kyoto",
+                url = "https://source.unsplash.com/NYyCqdBOKwc/600x800"
+            )
+        )
         spots.add(Spot(name = "Bamboo Forest", city = "Kyoto", url = "https://source.unsplash.com/buF62ewDLcQ/600x800"))
-        spots.add(Spot(name = "Brooklyn Bridge", city = "New York", url = "https://source.unsplash.com/THozNzxEP3g/600x800"))
-        spots.add(Spot(name = "Empire State Building", city = "New York", url = "https://source.unsplash.com/USrZRcRS2Lw/600x800"))
-        spots.add(Spot(name = "The statue of Liberty", city = "New York", url = "https://source.unsplash.com/PeFk7fzxTdk/600x800"))
+        spots.add(
+            Spot(
+                name = "Brooklyn Bridge",
+                city = "New York",
+                url = "https://source.unsplash.com/THozNzxEP3g/600x800"
+            )
+        )
+        spots.add(
+            Spot(
+                name = "Empire State Building",
+                city = "New York",
+                url = "https://source.unsplash.com/USrZRcRS2Lw/600x800"
+            )
+        )
+        spots.add(
+            Spot(
+                name = "The statue of Liberty",
+                city = "New York",
+                url = "https://source.unsplash.com/PeFk7fzxTdk/600x800"
+            )
+        )
         spots.add(Spot(name = "Louvre Museum", city = "Paris", url = "https://source.unsplash.com/LrMWHKqilUw/600x800"))
         spots.add(Spot(name = "Eiffel Tower", city = "Paris", url = "https://source.unsplash.com/HN-5Z6AmxrM/600x800"))
         spots.add(Spot(name = "Big Ben", city = "London", url = "https://source.unsplash.com/CdVAUADdqEc/600x800"))
-        spots.add(Spot(name = "Great Wall of China", city = "China", url = "https://source.unsplash.com/AWh9C-QjhE4/600x800"))
+        spots.add(
+            Spot(
+                name = "Great Wall of China",
+                city = "China",
+                url = "https://source.unsplash.com/AWh9C-QjhE4/600x800"
+            )
+        )
         return spots
     }
 

@@ -20,11 +20,11 @@ class Server {
     private Server() {
         // should be initialized by calling remote server
         List<Group> suggested = new ArrayList<>();
-        Group nokmim = new Group("הנוקמים", String.valueOf(++id));
-        nokmim.addMember(new User("Tal", null));
-        nokmim.addMember(new User("Itay", null));
-        nokmim.addMember(new User("Imri", null));
-        suggested.add(nokmim);
+        Group avengers = new Group("הנוקמים", String.valueOf(++id));
+        avengers.addMember(new User("Tal", null));
+        avengers.addMember(new User("Itay", null));
+        avengers.addMember(new User("Imri", "img/"));
+        suggested.add(avengers);
 
         suggested.add(new Group("כדורסל בגן סאקר", String.valueOf(++id)));
         suggested.add(new Group("נסיעה לטבריה", String.valueOf(++id)));

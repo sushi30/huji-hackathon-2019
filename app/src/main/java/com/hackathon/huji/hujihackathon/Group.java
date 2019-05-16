@@ -1,8 +1,5 @@
 package com.hackathon.huji.hujihackathon;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-
 import java.util.ArrayList;
 import java.util.List;
 
