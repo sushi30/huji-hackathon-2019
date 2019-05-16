@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,7 +38,19 @@ public class OpeningActivity extends AppCompatActivity {
             public void onChanged(@Nullable List<Group> groups) {
                 RecyclerView recyclerView = findViewById(R.id.groups_recycler_view);
                 recyclerView.setLayoutManager(new LinearLayoutManager(OpeningActivity.this));
-                recyclerView.setAdapter(new GroupAdapter(OpeningActivity.this, groups));
+                recyclerView.setAdapter(new GroupAdapter(groups));
+            }
+        });
+
+        findViewById(R.id.create_group_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                CreateGroupFragment fragment = new CreateGroupFragment();
+                //fragment.show(fragmentManager, "create_group");
+                fragmentTransaction.add(R.id.create_group_container, fragment).addToBackStack("create_group");
+                fragmentTransaction.commit();
             }
         });
     }
@@ -58,9 +72,8 @@ public class OpeningActivity extends AppCompatActivity {
         private List<Group> groupContainingUser;
         //private Context context;
 
-        protected GroupAdapter(Context context, List<Group> groupContainingUser) {
+        protected GroupAdapter(List<Group> groupContainingUser) {
             this.groupContainingUser = groupContainingUser;
-            //this.context = context;
         }
 
         @NonNull
@@ -89,8 +102,8 @@ public class OpeningActivity extends AppCompatActivity {
             for (String tag : tags) {
                 TextView textView = new TextView(groupHolder.groupTags.getContext());
                 textView.setTextColor(Color.WHITE);
-                textView.setTextSize(24);
-                textView.setPadding(10, 10, 2, 2);
+                textView.setTextSize(18);
+                textView.setPadding(20, 20, 2, 2);
                 String text = "#" + tag;
                 textView.setText(text);
                 groupHolder.groupTags.addView(textView);
