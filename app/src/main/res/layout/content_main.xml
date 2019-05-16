@@ -15,14 +15,14 @@
             android:layout_height="wrap_content"
             android:id="@+id/my_profile"
             android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/swipe _screen" android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/swipe_screen" android:layout_marginTop="8dp"
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
     <Button
             android:text="Swipe Screen"
             android:layout_width="122dp"
             android:layout_height="wrap_content"
-            android:id="@+id/swipe _screen"
+            android:id="@+id/swipe_screen"
             tools:layout_editor_absoluteY="312dp" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
     <Button
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/matches"
             android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/swipe _screen" android:layout_marginBottom="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/swipe_screen" android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
 
