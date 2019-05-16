@@ -29,9 +29,9 @@ class CardStackAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val group = groups[position]
         holder.name.text = "${group.id}. ${group.name}"
-        holder.city.text = group.tags.toString()
+        holder.tags.text = group.tags.toString()
         Glide.with(holder.image)
-            .load("https://source.unsplash.com/THozNzxEP3g/600x800")
+            .load(group.image)
             .into(holder.image)
         holder.itemView.setOnClickListener { v ->
             Toast.makeText(v.context, group.name, Toast.LENGTH_SHORT).show()
@@ -52,7 +52,7 @@ class CardStackAdapter(
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.item_name)
-        var city: TextView = view.findViewById(R.id.item_city)
+        var tags: TextView = view.findViewById(R.id.item_city)
         var image: ImageView = view.findViewById(R.id.item_image)
     }
 
