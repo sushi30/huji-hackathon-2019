@@ -4,12 +4,14 @@ import android.graphics.drawable.Drawable;
 
 public class User {
 
+    private static int ids = 0;
+
     private String id;
     private String name;
     private Drawable picture;
 
-    public User(String id, String name, Drawable picture) {
-        this.id = id;
+    public User(String name, Drawable picture) {
+        this.id = String.valueOf(++ids);
         this.name = name;
         this.picture = picture;
     }

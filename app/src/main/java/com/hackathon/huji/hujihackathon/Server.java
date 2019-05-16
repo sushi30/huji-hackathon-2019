@@ -20,7 +20,12 @@ class Server {
     private Server() {
         // should be initialized by calling remote server
         List<Group> suggested = new ArrayList<>();
-        suggested.add(new Group("הנוקמים", String.valueOf(++id)));
+        Group nokmim = new Group("הנוקמים", String.valueOf(++id));
+        nokmim.addMember(new User("Tal", null));
+        nokmim.addMember(new User("Itay", null));
+        nokmim.addMember(new User("Imri", null));
+        suggested.add(nokmim);
+
         suggested.add(new Group("כדורסל בגן סאקר", String.valueOf(++id)));
         suggested.add(new Group("נסיעה לטבריה", String.valueOf(++id)));
         suggested.add(new Group("אושן 12", String.valueOf(++id)));
@@ -31,5 +36,9 @@ class Server {
 
     public LiveData<List<Group>> getSuggestedGroups() {
         return suggestedGroups;
+    }
+
+    public void addMember(Group group, User user){
+        group.addMember(user);
     }
 }

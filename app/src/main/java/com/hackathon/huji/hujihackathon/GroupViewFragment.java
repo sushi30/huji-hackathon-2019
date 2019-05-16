@@ -68,26 +68,15 @@ public class GroupViewFragment extends Fragment {
         final TextView groupName = layout.findViewById(R.id.group_name);
         final Group group = viewModel.getGroupById(id);
 
-        // observer the group name and members. update if needed
-        group.getName().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                groupName.setText(group.getName().getValue());
-            }
-        });
+        groupName.setText(group.getName());
 
-        group.getMembers().observe(this, new Observer<List<User>>() {
-            @Override
-            public void onChanged(@Nullable List<User> users) {
-                if (users == null) return;
-                for (User user : users) {
-                    LinearLayout linearLayout = layout.findViewById(R.id.mainLayout);
-                    TextView textView = new TextView(GroupViewFragment.this.getContext());
-                    textView.setText(user.getName());
-                    linearLayout.addView(textView);
-                }
-            }
-        });
+        List<User> users = group.getMembers();
+        for (User user : users) {
+            LinearLayout linearLayout = layout.findViewById(R.id.mainLayout);
+            TextView textView = new TextView(GroupViewFragment.this.getContext());
+            textView.setText(user.getName());
+            linearLayout.addView(textView);
+        }
 
         return layout;
     }
