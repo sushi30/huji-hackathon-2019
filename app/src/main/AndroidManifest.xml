@@ -3,7 +3,7 @@
           package="com.hackathon.huji.hujihackathon">
 
     <uses-permission android:name="android.permission.INTERNET"/>
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
             android:supportsRtl="false"
             android:allowBackup="true"
@@ -15,7 +15,7 @@
                   android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
+                <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
