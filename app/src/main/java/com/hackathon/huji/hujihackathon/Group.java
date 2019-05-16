@@ -1,6 +1,7 @@
 package com.hackathon.huji.hujihackathon;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Group {
@@ -10,14 +11,14 @@ public class Group {
     private List<User> members;
     private List<String> tags;
 
-    public Group(String groupName, String id) {
+    public Group(String groupName, String id, String... tags) {
         this.id = id;
         name = groupName;
         members = new ArrayList<>();
-        tags = new ArrayList<>();
+        this.tags = new ArrayList<>(Arrays.asList(tags));
     }
 
-    public void addMember(User user){
+    public void addMember(User user) {
         members.add(user);
     }
 
