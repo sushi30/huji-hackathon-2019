@@ -65,9 +65,17 @@ public class GroupViewFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View layout = inflater.inflate(R.layout.fragment_group_view, container, false);
-        TextView groupName = layout.findViewById(R.id.group_name);
-        Group group = viewModel.getGroupById(groupName.getText().toString());
-        groupName.setText(group.getName().getValue());
+        final TextView groupName = layout.findViewById(R.id.group_name);
+        final Group group = viewModel.getGroupById(id);
+
+        // observer the group name and members. update if needed
+        group.getName().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                groupName.setText(group.getName().getValue());
+            }
+        });
+
         group.getMembers().observe(this, new Observer<List<User>>() {
             @Override
             public void onChanged(@Nullable List<User> users) {
