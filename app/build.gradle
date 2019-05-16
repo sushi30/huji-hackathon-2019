@@ -57,4 +57,5 @@ dependencies {
     annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
 
     implementation 'me.gujun.android.taggroup:library:1.4@aar'
+    implementation 'com.google.code.gson:gson:2.8.5'
 }
