@@ -1,4 +1,4 @@
-package com.yuyakaido.android.cardstackview.sample
+package com.hackathon.huji.hujihackathon
 
 data class Spot(
         val id: Long = counter++,

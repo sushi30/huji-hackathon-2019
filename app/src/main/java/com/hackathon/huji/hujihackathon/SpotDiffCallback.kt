@@ -1,4 +1,4 @@
-package com.yuyakaido.android.cardstackview.sample
+package com.hackathon.huji.hujihackathon
 
 import android.support.v7.util.DiffUtil
 
