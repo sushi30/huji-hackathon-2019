@@ -41,7 +41,7 @@ public class GroupViewFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static GroupViewFragment newInstance(String param1, String param2) {
+    public static GroupViewFragment newInstance(String param1) {
         GroupViewFragment fragment = new GroupViewFragment();
         Bundle args = new Bundle();
         args.putString(GROUP_ID, param1);

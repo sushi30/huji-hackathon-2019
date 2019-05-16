@@ -9,10 +9,13 @@ import java.util.List;
 public class SwipingViewModel extends ViewModel {
 
     private LiveData<List<Group>> suggestedGroups;
+    private MutableLiveData<Group> curGroupToShow;
 
     public SwipingViewModel() {
         suggestedGroups = new MutableLiveData<>();
         suggestedGroups = Server.getInstance().getSuggestedGroups();
+        curGroupToShow = new MutableLiveData<>();
+        curGroupToShow.postValue(suggestedGroups.getValue().get(0));
     }
 
     public LiveData<List<Group>> getSuggestedGroups() {
@@ -30,6 +33,10 @@ public class SwipingViewModel extends ViewModel {
         }
 
         return null;
+    }
+
+    public MutableLiveData<Group> getCurGroupToShow() {
+        return curGroupToShow;
     }
 
 }
