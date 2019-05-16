@@ -30,9 +30,7 @@ import java.util.List;
  */
 public class GroupViewFragment extends Fragment {
     // the fragment initialization parameters
-    private static final String GROUP_ID = "id";
 
-    private String id;
     private SwipingViewModel viewModel;
 
     private OnFragmentInteractionListener mListener;
@@ -41,10 +39,9 @@ public class GroupViewFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static GroupViewFragment newInstance(String param1) {
+    public static GroupViewFragment newInstance() {
         GroupViewFragment fragment = new GroupViewFragment();
         Bundle args = new Bundle();
-        args.putString(GROUP_ID, param1);
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,28 +52,30 @@ public class GroupViewFragment extends Fragment {
         FragmentActivity activity = getActivity();
         if (activity == null) return;
         viewModel = ViewModelProviders.of(activity).get(SwipingViewModel.class);
-        if (getArguments() != null) {
-            id = getArguments().getString(GROUP_ID);
-        }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View layout = inflater.inflate(R.layout.fragment_group_view, container, false);
         final TextView groupName = layout.findViewById(R.id.group_name);
-        final Group group = viewModel.getGroupById(id);
 
-        groupName.setText(group.getName());
+        viewModel.getCurGroupToShow().observe(this, new Observer<Group>() {
+            @Override
+            public void onChanged(@Nullable Group group) {
+                if (group == null) return;
+                groupName.setText(group.getName());
 
-        List<User> users = group.getMembers();
-        for (User user : users) {
-            LinearLayout linearLayout = layout.findViewById(R.id.mainLayout);
-            TextView textView = new TextView(GroupViewFragment.this.getContext());
-            textView.setText(user.getName());
-            linearLayout.addView(textView);
-        }
+                List<User> users = group.getMembers();
+                for (User user : users) {
+                    LinearLayout linearLayout = layout.findViewById(R.id.mainLayout);
+                    TextView textView = new TextView(GroupViewFragment.this.getContext());
+                    textView.setText(user.getName());
+                    linearLayout.addView(textView);
+                }
+            }
+        });
 
         return layout;
     }
