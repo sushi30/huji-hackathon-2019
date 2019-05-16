@@ -1,5 +1,7 @@
 package com.hackathon.huji.hujihackathon
 
+import android.arch.lifecycle.ViewModelProviders
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.widget.DrawerLayout
@@ -12,10 +14,10 @@ import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
-import android.widget.TextView
 import com.yuyakaido.android.cardstackview.*
-import java.lang.StringBuilder
-import java.util.*
+import kotlin.collections.ArrayList
+import GroupInfoDialogFragment
+
 
 const val LOG_TAG = "SwipeActivity"
 
@@ -24,7 +26,8 @@ class SwipeActivity : AppCompatActivity(), CardStackListener {
     private val drawerLayout by lazy { findViewById<DrawerLayout>(R.id.drawer_layout) }
     private val cardStackView by lazy { findViewById<CardStackView>(R.id.card_stack_view) }
     private val manager by lazy { CardStackLayoutManager(this, this) }
-    private val adapter by lazy { CardStackAdapter(createSpots()) }
+    private val adapter by lazy { CardStackAdapter(ArrayList()) }
+    private val model by lazy { ViewModelProviders.of(this).get(SwipingViewModel::class.java) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +35,15 @@ class SwipeActivity : AppCompatActivity(), CardStackListener {
         setupNavigation()
         setupCardStackView()
         setupButton()
+        model.suggestedGroups.observe(this, Observer<List<Group>> { groups ->
+            if (groups == null) {
+                adapter.setGroups(ArrayList())
+            } else {
+                adapter.setGroups(groups)
+            }
+
+        })
+
     }
 
     override fun onBackPressed() {
@@ -47,6 +59,12 @@ class SwipeActivity : AppCompatActivity(), CardStackListener {
     }
 
     override fun onCardSwiped(direction: Direction) {
+        if (direction == Direction.Left) {
+            // set group false
+            // add group to never show again!
+        } else if (direction == Direction.Right) {
+            // send swipe right API
+        }
         Log.d("CardStackView", "onCardSwiped: p = ${manager.topPosition}, d = $direction")
         if (manager.topPosition == adapter.itemCount - 5) {
             paginate()
@@ -105,15 +123,9 @@ class SwipeActivity : AppCompatActivity(), CardStackListener {
             cardStackView.swipe()
         }
 
-        val rewind = findViewById<View>(R.id.rewind_button)
-        rewind.setOnClickListener {
-            val setting = RewindAnimationSetting.Builder()
-                .setDirection(Direction.Bottom)
-                .setDuration(Duration.Normal.duration)
-                .setInterpolator(DecelerateInterpolator())
-                .build()
-            manager.setRewindAnimationSetting(setting)
-            cardStackView.rewind()
+        val info = findViewById<View>(R.id.info_button)
+        info.setOnClickListener {
+            showEditDialog(manager.topPosition)
         }
 
         val like = findViewById<View>(R.id.like_button)
@@ -126,6 +138,14 @@ class SwipeActivity : AppCompatActivity(), CardStackListener {
             manager.setSwipeAnimationSetting(setting)
             cardStackView.swipe()
         }
+    }
+
+    private fun showEditDialog(groupIndex: Int) {
+        val fm = supportFragmentManager
+        val group = adapter.getGroups()[groupIndex]
+        Log.d(LOG_TAG, "Opening info dialog for group: " + groupIndex.toShort())
+        val editNameDialogFragment = GroupInfoDialogFragment.newInstance(group)
+        editNameDialogFragment.show(fm, "fragment_edit_name")
     }
 
     private fun initialize() {
@@ -150,60 +170,60 @@ class SwipeActivity : AppCompatActivity(), CardStackListener {
     }
 
     private fun paginate() {
-        val old = adapter.getSpots()
-        val new = old.plus(createSpots())
-        Log.d(
-            LOG_TAG,
-            StringBuilder().append("paginate: ").append("old: ").append(old.toString()).append("new: ").append(new.toString()).toString()
-        )
-        val callback = SpotDiffCallback(old, new)
-        val result = DiffUtil.calculateDiff(callback)
-        adapter.setSpots(new)
-        result.dispatchUpdatesTo(adapter)
+//        val old = adapter.getGroups()
+//        val new = old.plus(createSpots())
+//        Log.d(
+//            LOG_TAG,
+//            StringBuilder().append("paginate: ").append("old: ").append(old.toString()).append("new: ").append(new.toString()).toString()
+//        )
+//        val callback = SpotDiffCallback(old, new)
+//        val result = DiffUtil.calculateDiff(callback)
+//        adapter.setGroups(new)
+//        result.dispatchUpdatesTo(adapter)
     }
 
     private fun reload() {
-        val old = adapter.getSpots()
-        val new = createSpots()
+        val old = adapter.getGroups()
+        val new = ArrayList<Group>()
         val callback = SpotDiffCallback(old, new)
         val result = DiffUtil.calculateDiff(callback)
-        adapter.setSpots(new)
+        adapter.setGroups(new)
         result.dispatchUpdatesTo(adapter)
     }
 
     private fun addFirst(size: Int) {
-        val old = adapter.getSpots()
-        val new = mutableListOf<Spot>().apply {
+        val old = adapter.getGroups()
+        val new = mutableListOf<Group>().apply {
             addAll(old)
             for (i in 0 until size) {
-                add(manager.topPosition, createSpot())
+                add(manager.topPosition, createGroup())
             }
         }
         val callback = SpotDiffCallback(old, new)
         val result = DiffUtil.calculateDiff(callback)
-        adapter.setSpots(new)
+        adapter.setGroups(new)
         result.dispatchUpdatesTo(adapter)
     }
 
     private fun addLast(size: Int) {
-        val old = adapter.getSpots()
-        val new = mutableListOf<Spot>().apply {
+        val old = adapter.getGroups()
+        val new = mutableListOf<Group>().apply {
             addAll(old)
-            addAll(List(size) { createSpot() })
+            addAll(List(size) { createGroup() })
         }
         val callback = SpotDiffCallback(old, new)
         val result = DiffUtil.calculateDiff(callback)
-        adapter.setSpots(new)
+        adapter.setGroups(new)
         result.dispatchUpdatesTo(adapter)
     }
 
     private fun removeFirst(size: Int) {
-        if (adapter.getSpots().isEmpty()) {
+        if (adapter.getGroups().isEmpty()) {
             return
         }
 
-        val old = adapter.getSpots()
-        val new = mutableListOf<Spot>().apply {
+        val old = adapter.getGroups()
+        val new = mutableListOf<Group>().apply {
             addAll(old)
             for (i in 0 until size) {
                 removeAt(manager.topPosition)
@@ -211,17 +231,17 @@ class SwipeActivity : AppCompatActivity(), CardStackListener {
         }
         val callback = SpotDiffCallback(old, new)
         val result = DiffUtil.calculateDiff(callback)
-        adapter.setSpots(new)
+        adapter.setGroups(new)
         result.dispatchUpdatesTo(adapter)
     }
 
     private fun removeLast(size: Int) {
-        if (adapter.getSpots().isEmpty()) {
+        if (adapter.getGroups().isEmpty()) {
             return
         }
 
-        val old = adapter.getSpots()
-        val new = mutableListOf<Spot>().apply {
+        val old = adapter.getGroups()
+        val new = mutableListOf<Group>().apply {
             addAll(old)
             for (i in 0 until size) {
                 removeAt(this.size - 1)
@@ -229,24 +249,24 @@ class SwipeActivity : AppCompatActivity(), CardStackListener {
         }
         val callback = SpotDiffCallback(old, new)
         val result = DiffUtil.calculateDiff(callback)
-        adapter.setSpots(new)
+        adapter.setGroups(new)
         result.dispatchUpdatesTo(adapter)
     }
 
     private fun replace() {
-        val old = adapter.getSpots()
-        val new = mutableListOf<Spot>().apply {
+        val old = adapter.getGroups()
+        val new = mutableListOf<Group>().apply {
             addAll(old)
             removeAt(manager.topPosition)
-            add(manager.topPosition, createSpot())
+            add(manager.topPosition, createGroup())
         }
-        adapter.setSpots(new)
+        adapter.setGroups(new)
         adapter.notifyItemChanged(manager.topPosition)
     }
 
     private fun swap() {
-        val old = adapter.getSpots()
-        val new = mutableListOf<Spot>().apply {
+        val old = adapter.getGroups()
+        val new = mutableListOf<Group>().apply {
             addAll(old)
             val first = removeAt(manager.topPosition)
             val last = removeAt(this.size - 1)
@@ -255,61 +275,14 @@ class SwipeActivity : AppCompatActivity(), CardStackListener {
         }
         val callback = SpotDiffCallback(old, new)
         val result = DiffUtil.calculateDiff(callback)
-        adapter.setSpots(new)
+        adapter.setGroups(new)
         result.dispatchUpdatesTo(adapter)
     }
 
-    private fun createSpot(): Spot {
-        return Spot(
-            name = "Yasaka Shrine",
-            city = "Kyoto",
-            url = "https://source.unsplash.com/Xq1ntWruZQI/600x800"
-        )
+    private fun createGroup(): Group {
+        val maccabi = Group("Maccabi SP", "111", "Basketball", "Sacher_Park")
+        maccabi.addMember(User("Yuval"))
+        maccabi.addMember(User("Itamar"))
+        return maccabi
     }
-
-    private fun createSpots(): List<Spot> {
-        val spots = ArrayList<Spot>()
-        spots.add(Spot(name = "Yasaka Shrine", city = "Kyoto", url = "https://source.unsplash.com/Xq1ntWruZQI/600x800"))
-        spots.add(
-            Spot(
-                name = "Fushimi Inari Shrine",
-                city = "Kyoto",
-                url = "https://source.unsplash.com/NYyCqdBOKwc/600x800"
-            )
-        )
-        spots.add(Spot(name = "Bamboo Forest", city = "Kyoto", url = "https://source.unsplash.com/buF62ewDLcQ/600x800"))
-        spots.add(
-            Spot(
-                name = "Brooklyn Bridge",
-                city = "New York",
-                url = "https://source.unsplash.com/THozNzxEP3g/600x800"
-            )
-        )
-        spots.add(
-            Spot(
-                name = "Empire State Building",
-                city = "New York",
-                url = "https://source.unsplash.com/USrZRcRS2Lw/600x800"
-            )
-        )
-        spots.add(
-            Spot(
-                name = "The statue of Liberty",
-                city = "New York",
-                url = "https://source.unsplash.com/PeFk7fzxTdk/600x800"
-            )
-        )
-        spots.add(Spot(name = "Louvre Museum", city = "Paris", url = "https://source.unsplash.com/LrMWHKqilUw/600x800"))
-        spots.add(Spot(name = "Eiffel Tower", city = "Paris", url = "https://source.unsplash.com/HN-5Z6AmxrM/600x800"))
-        spots.add(Spot(name = "Big Ben", city = "London", url = "https://source.unsplash.com/CdVAUADdqEc/600x800"))
-        spots.add(
-            Spot(
-                name = "Great Wall of China",
-                city = "China",
-                url = "https://source.unsplash.com/AWh9C-QjhE4/600x800"
-            )
-        )
-        return spots
-    }
-
 }

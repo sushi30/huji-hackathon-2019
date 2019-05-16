@@ -8,45 +8,44 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
-import android.support.v7.app.AppCompatActivity
-
 
 class CardStackAdapter(
-    private var spots: List<Spot> = emptyList()
+    private var groups: List<Group> = emptyList()
 ) : RecyclerView.Adapter<CardStackAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val activity = parent.context as AppCompatActivity
-        val fragment = GroupViewFragment()
-        val fragmentManager = activity.supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.fragment_container, fragment)
-        fragmentTransaction.commit()
-
         val inflater = LayoutInflater.from(parent.context)
         return ViewHolder(inflater.inflate(R.layout.item_spot, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val spot = spots[position]
+        val group = groups[position]
+        holder.name.text = "${group.id}. ${group.name}"
+        holder.tags.text = group.tags.toString()
+        Glide.with(holder.image)
+            .load(group.image)
+            .into(holder.image)
         holder.itemView.setOnClickListener { v ->
-            Toast.makeText(v.context, spot.name, Toast.LENGTH_SHORT).show()
+            Toast.makeText(v.context, group.name, Toast.LENGTH_SHORT).show()
         }
     }
 
     override fun getItemCount(): Int {
-        return spots.size
+        return groups.size
     }
 
-    fun setSpots(spots: List<Spot>) {
-        this.spots = spots
+    fun setGroups(spots: List<Group>) {
+        this.groups = spots
     }
 
-    fun getSpots(): List<Spot> {
-        return spots
+    fun getGroups(): List<Group> {
+        return groups
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val name: TextView = view.findViewById(R.id.item_name)
+        var tags: TextView = view.findViewById(R.id.item_city)
+        var image: ImageView = view.findViewById(R.id.item_image)
     }
 
 }

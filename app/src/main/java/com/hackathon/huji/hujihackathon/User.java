@@ -1,6 +1,10 @@
 package com.hackathon.huji.hujihackathon;
 
-public class User {
+import android.os.Parcel;
+import android.os.Parcelable;
+import org.jetbrains.annotations.NotNull;
+
+public class User implements Parcelable {
 
     private static int ids = 0;
 
@@ -8,11 +12,29 @@ public class User {
     private String name;
     private String picture;
 
-    public User(String name, String picture) {
+    public User(String name) {
         this.id = String.valueOf(++ids);
         this.name = name;
-        this.picture = picture;
+//        this.picture = picture;
     }
+
+    private User(@NotNull Parcel in) {
+        id = in.readString();
+        name = in.readString();
+        picture = in.readString();
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -36,5 +58,17 @@ public class User {
 
     public void setPicture(String picture) {
         this.picture = picture;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(name);
+        dest.writeString(picture);
     }
 }
