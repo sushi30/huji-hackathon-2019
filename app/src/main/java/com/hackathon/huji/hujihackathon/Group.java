@@ -9,32 +9,34 @@ import java.util.List;
 public class Group {
 
     private String id;
-    private MutableLiveData<String> name;
-    private MutableLiveData<List<User>> members;
-    private MutableLiveData<List<String>> tags;
+    private String name;
+    private List<User> members;
+    private List<String> tags;
 
     public Group(String groupName, String id) {
         this.id = id;
-        name = new MutableLiveData<>();
-        members = new MutableLiveData<>();
-        tags = new MutableLiveData<>();
-        name.setValue(groupName);
-        members.setValue(new ArrayList<User>());
+        name = groupName;
+        members = new ArrayList<>();
+        tags = new ArrayList<>();
     }
 
-    public LiveData<List<User>> getMembers(){
-        return members;
-    }
-
-    public LiveData<String> getName() {
-        return name;
-    }
-
-    public LiveData<List<String>> getTags() {
-        return tags;
+    public void addMember(User user){
+        members.add(user);
     }
 
     public String getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<User> getMembers() {
+        return members;
+    }
+
+    public List<String> getTags() {
+        return tags;
     }
 }
