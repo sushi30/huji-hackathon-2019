@@ -70,8 +70,11 @@ public class Server {
         return suggestedGroups;
     }
 
-    public void addMember(Group group, User user) {
-        group.addMember(user);
+    public void createGroup(Group group){
+        List<Group> groups = groupsContainingUser.getValue();
+        if (groups == null) return;
+        groups.add(group);
+        groupsContainingUser.postValue(groups);
     }
 
     public LiveData<List<Group>> getGroupsContainingUser() {
