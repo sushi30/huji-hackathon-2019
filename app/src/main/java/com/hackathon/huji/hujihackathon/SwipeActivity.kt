@@ -16,6 +16,8 @@ import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import com.yuyakaido.android.cardstackview.*
 import kotlin.collections.ArrayList
+import GroupInfoDialogFragment
+
 
 const val LOG_TAG = "SwipeActivity"
 
@@ -123,13 +125,7 @@ class SwipeActivity : AppCompatActivity(), CardStackListener {
 
         val info = findViewById<View>(R.id.info_button)
         info.setOnClickListener {
-            val setting = RewindAnimationSetting.Builder()
-                .setDirection(Direction.Bottom)
-                .setDuration(Duration.Normal.duration)
-                .setInterpolator(DecelerateInterpolator())
-                .build()
-            manager.setRewindAnimationSetting(setting)
-            cardStackView.rewind()
+            showEditDialog(manager.topPosition)
         }
 
         val like = findViewById<View>(R.id.like_button)
@@ -142,6 +138,14 @@ class SwipeActivity : AppCompatActivity(), CardStackListener {
             manager.setSwipeAnimationSetting(setting)
             cardStackView.swipe()
         }
+    }
+
+    private fun showEditDialog(groupIndex: Int) {
+        val fm = supportFragmentManager
+        val group = adapter.getGroups()[groupIndex]
+        Log.d(LOG_TAG, "Opening info dialog for group: " + groupIndex.toShort())
+        val editNameDialogFragment = GroupInfoDialogFragment.newInstance(group)
+        editNameDialogFragment.show(fm, "fragment_edit_name")
     }
 
     private fun initialize() {
