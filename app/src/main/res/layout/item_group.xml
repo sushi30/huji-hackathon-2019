@@ -37,14 +37,9 @@
                 android:textColor="@android:color/white"
                 android:textSize="26sp"/>
 
-        <TextView
-                android:id="@+id/item_city"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:textSize="20sp"/>
-
+        <me.gujun.android.taggroup.TagGroup
+                android:id="@+id/tag_group"
+                style="@style/TagGroup"/>
     </LinearLayout>
 
     <FrameLayout

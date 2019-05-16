@@ -10,11 +10,12 @@ import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.hackathon.huji.hujihackathon.Group
 import com.hackathon.huji.hujihackathon.R
+import me.gujun.android.taggroup.TagGroup
+
 
 class CardStackAdapter(
     private var groups: List<Group> = emptyList()
 ) : RecyclerView.Adapter<CardStackAdapter.ViewHolder>() {
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return ViewHolder(
@@ -28,8 +29,8 @@ class CardStackAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val group = groups[position]
-        holder.name.text = "${group.id}. ${group.name}"
-        holder.tags.text = group.tags.toString()
+        holder.name.text = "${group.name}"
+        holder.tags.setTags(*group.tags.toTypedArray())
         Glide.with(holder.image)
             .load(group.image)
             .into(holder.image)
@@ -52,8 +53,8 @@ class CardStackAdapter(
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.item_name)
-        var tags: TextView = view.findViewById(R.id.item_city)
         var image: ImageView = view.findViewById(R.id.item_image)
+        var tags: TagGroup = view.findViewById(R.id.tag_group)
     }
 
 }
