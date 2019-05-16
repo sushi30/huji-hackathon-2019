@@ -21,7 +21,7 @@ public class Server {
     private Server() {
         // should call remote
         List<Group> containingUser = new ArrayList<>();
-        Group hackathon = new Group("hackathon", String.valueOf(++id));
+        Group hackathon = new Group("hackathon", String.valueOf(++id), null);
         hackathon.addMember(new User("Itamar"));
         hackathon.addMember(new User("Yuval"));
         hackathon.addTag("Hackathon");
@@ -31,7 +31,7 @@ public class Server {
         hackathon.addTag("groups");
         hackathon.addTag("headache");
 
-        Group revenges = new Group("הנוקמים", String.valueOf(++id));
+        Group revenges = new Group("הנוקמים", String.valueOf(++id), null);
         revenges.addMember(new User("Tal"));
         revenges.addMember(new User("Imri"));
         revenges.addTag("movies");
