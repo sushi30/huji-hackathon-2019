@@ -8,10 +8,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
-import com.hackathon.huji.hujihackathon.R
 
 class CardStackAdapter(
-    private var spots: List<Spot> = emptyList()
+    private var groups: List<Group> = emptyList()
 ) : RecyclerView.Adapter<CardStackAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -20,27 +19,27 @@ class CardStackAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val spot = spots[position]
-        holder.name.text = "${spot.id}. ${spot.name}"
-        holder.city.text = spot.city
+        val group = groups[position]
+        holder.name.text = "${group.id}. ${group.name}"
+        holder.city.text = group.tags.toString()
         Glide.with(holder.image)
-            .load(spot.url)
+            .load("https://source.unsplash.com/THozNzxEP3g/600x800")
             .into(holder.image)
         holder.itemView.setOnClickListener { v ->
-            Toast.makeText(v.context, spot.name, Toast.LENGTH_SHORT).show()
+            Toast.makeText(v.context, group.name, Toast.LENGTH_SHORT).show()
         }
     }
 
     override fun getItemCount(): Int {
-        return spots.size
+        return groups.size
     }
 
-    fun setSpots(spots: List<Spot>) {
-        this.spots = spots
+    fun setGroups(spots: List<Group>) {
+        this.groups = spots
     }
 
-    fun getSpots(): List<Spot> {
-        return spots
+    fun getGroups(): List<Group> {
+        return groups
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

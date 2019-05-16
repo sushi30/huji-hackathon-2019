@@ -4,7 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
-import java.util.List;
+import java.util.*;
 
 public class SwipingViewModel extends ViewModel {
 
@@ -14,8 +14,6 @@ public class SwipingViewModel extends ViewModel {
     public SwipingViewModel() {
         suggestedGroups = new MutableLiveData<>();
         suggestedGroups = Server.getInstance().getSuggestedGroups();
-        curGroupToShow = new MutableLiveData<>();
-        curGroupToShow.postValue(suggestedGroups.getValue().get(0));
     }
 
     public LiveData<List<Group>> getSuggestedGroups() {
@@ -35,8 +33,5 @@ public class SwipingViewModel extends ViewModel {
         return null;
     }
 
-    public MutableLiveData<Group> getCurGroupToShow() {
-        return curGroupToShow;
-    }
 
 }

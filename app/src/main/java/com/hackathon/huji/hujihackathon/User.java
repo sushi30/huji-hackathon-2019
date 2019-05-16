@@ -8,10 +8,10 @@ public class User {
     private String name;
     private String picture;
 
-    public User(String name, String picture) {
+    public User(String name) {
         this.id = String.valueOf(++ids);
         this.name = name;
-        this.picture = picture;
+//        this.picture = picture;
     }
 
     public String getId() {

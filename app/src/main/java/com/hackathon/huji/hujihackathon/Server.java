@@ -20,15 +20,20 @@ class Server {
     private Server() {
         // should be initialized by calling remote server
         List<Group> suggested = new ArrayList<>();
-        Group avengers = new Group("הנוקמים", String.valueOf(++id));
-        avengers.addMember(new User("Tal", null));
-        avengers.addMember(new User("Itay", null));
-        avengers.addMember(new User("Imri", "img/"));
+        Group avengers = new Group("Avengers", String.valueOf(++id), "hackathon", "huji");
+        avengers.addMember(new User("Tal"));
+        avengers.addMember(new User("Itay"));
+        avengers.addMember(new User("Imri"));
         suggested.add(avengers);
 
-        suggested.add(new Group("כדורסל בגן סאקר", String.valueOf(++id)));
-        suggested.add(new Group("נסיעה לטבריה", String.valueOf(++id)));
-        suggested.add(new Group("אושן 12", String.valueOf(++id)));
+        Group maccabi = new Group("Maccabi SP", String.valueOf(++id), "Basketball", "Sacher_Park");
+        maccabi.addMember(new User("Yuval"));
+        maccabi.addMember(new User("Itamar"));
+        suggested.add(maccabi);
+
+        Group north = new Group("The North Remembers", String.valueOf(++id), "dive", "from:jerusalem", "to:tiberias");
+        north.addMember(new User("Assaf"));
+        suggested.add(north);
 
         suggestedGroups = new MutableLiveData<>();
         suggestedGroups.postValue(suggested);
@@ -38,7 +43,7 @@ class Server {
         return suggestedGroups;
     }
 
-    public void addMember(Group group, User user){
+    public void addMember(Group group, User user) {
         group.addMember(user);
     }
 }

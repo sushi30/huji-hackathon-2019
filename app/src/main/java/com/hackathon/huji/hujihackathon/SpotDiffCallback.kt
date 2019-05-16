@@ -3,8 +3,8 @@ package com.hackathon.huji.hujihackathon
 import android.support.v7.util.DiffUtil
 
 class SpotDiffCallback(
-        private val old: List<Spot>,
-        private val new: List<Spot>
+        private val old: List<Group>,
+        private val new: List<Group>
 ) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int {
