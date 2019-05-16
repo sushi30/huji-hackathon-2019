@@ -8,18 +8,15 @@
     <TextView
             android:id="@+id/group_title"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-    <ImageView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_menu_send" android:contentDescription="TODO"/>
+            android:layout_gravity="center_horizontal"
+            android:textStyle="bold"
+            android:textSize="14sp"/>
 
     <ListView
             android:id="@+id/dialoglist"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"/>
-
 
 
 </LinearLayout>

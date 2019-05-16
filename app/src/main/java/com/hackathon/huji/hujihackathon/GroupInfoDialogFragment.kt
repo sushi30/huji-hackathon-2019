@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.*
 import com.hackathon.huji.hujihackathon.Group
 import com.hackathon.huji.hujihackathon.R
+import com.hackathon.huji.hujihackathon.User
+import com.hackathon.huji.hujihackathon.UsersAdapter
 
 
 const val LOG_TAG = "GroupInfoDialogFragment"
@@ -36,11 +38,13 @@ class GroupInfoDialogFragment : DialogFragment() {
         if (group == null) {
             throw NullPointerException("received null group!")
         }
+        title = view.findViewById(R.id.group_title)
+        title!!.text = group!!.name
         val lv = view.findViewById<View>(R.id.dialoglist) as ListView
-        val adapter = ArrayAdapter<String>(
+        val adapter = UsersAdapter(
             this.context!!,
-            android.R.layout.simple_list_item_1,
-            group!!.members.map { m -> m.name })
+            ArrayList(group!!.members)
+        )
         lv.adapter = adapter
     }
 
