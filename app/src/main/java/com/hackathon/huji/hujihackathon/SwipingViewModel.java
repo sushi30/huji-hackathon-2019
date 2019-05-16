@@ -13,8 +13,6 @@ public class SwipingViewModel extends ViewModel {
     public SwipingViewModel() {
         suggestedGroups = new MutableLiveData<>();
         suggestedGroups = Server.getInstance().getSuggestedGroups();
-        curGroupToShow = new MutableLiveData<>();
-        curGroupToShow.postValue(suggestedGroups.getValue().get(0));
     }
 
     public LiveData<List<Group>> getSuggestedGroups() {

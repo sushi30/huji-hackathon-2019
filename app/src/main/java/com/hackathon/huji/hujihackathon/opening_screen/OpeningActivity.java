@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.hackathon.huji.hujihackathon.Group;
 import com.hackathon.huji.hujihackathon.R;
 import com.hackathon.huji.hujihackathon.Server;
-import com.hackathon.huji.hujihackathon.swipe_screen.SwipeActivity;
+import com.hackathon.huji.hujihackathon.SwipeActivity;
 
 import java.util.List;
 

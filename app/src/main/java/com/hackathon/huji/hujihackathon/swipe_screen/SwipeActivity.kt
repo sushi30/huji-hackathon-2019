@@ -17,6 +17,8 @@ import android.view.animation.LinearInterpolator
 import com.yuyakaido.android.cardstackview.*
 import kotlin.collections.ArrayList
 import GroupInfoDialogFragment
+import com.hackathon.huji.hujihackathon.swipe_screen.CardStackAdapter
+import com.hackathon.huji.hujihackathon.swipe_screen.SpotDiffCallback
 
 
 const val LOG_TAG = "SwipeActivity"
