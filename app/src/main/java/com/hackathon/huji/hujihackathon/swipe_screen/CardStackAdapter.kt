@@ -1,4 +1,4 @@
-package com.hackathon.huji.hujihackathon
+package com.hackathon.huji.hujihackathon.swipe_screen
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -8,6 +8,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
+import com.hackathon.huji.hujihackathon.Group
+import com.hackathon.huji.hujihackathon.R
 
 class CardStackAdapter(
     private var groups: List<Group> = emptyList()
@@ -15,7 +17,13 @@ class CardStackAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return ViewHolder(inflater.inflate(R.layout.item_spot, parent, false))
+        return ViewHolder(
+            inflater.inflate(
+                R.layout.item_spot,
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

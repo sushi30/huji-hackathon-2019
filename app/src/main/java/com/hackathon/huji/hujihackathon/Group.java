@@ -79,6 +79,10 @@ public class Group implements Parcelable {
         return tags;
     }
 
+    public void addTag(String tag){
+        tags.add(tag);
+    }
+
     @Override
     public int describeContents() {
         return 0;
