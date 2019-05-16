@@ -1,4 +1,4 @@
-package com.hackathon.huji.hujihackathon
+package com.hackathon.huji.hujihackathon.swipe_screen
 
 import android.arch.lifecycle.ViewModelProviders
 import android.arch.lifecycle.Observer
@@ -14,6 +14,8 @@ import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
+import com.hackathon.huji.hujihackathon.*
+import com.hackathon.huji.hujihackathon.R
 import com.yuyakaido.android.cardstackview.*
 import kotlin.collections.ArrayList
 
@@ -284,7 +286,13 @@ class SwipeActivity : AppCompatActivity(), CardStackListener {
 
     private fun createSpots(): List<Spot> {
         val spots = ArrayList<Spot>()
-        spots.add(Spot(name = "Yasaka Shrine", city = "Kyoto", url = "https://source.unsplash.com/Xq1ntWruZQI/600x800"))
+        spots.add(
+            Spot(
+                name = "Yasaka Shrine",
+                city = "Kyoto",
+                url = "https://source.unsplash.com/Xq1ntWruZQI/600x800"
+            )
+        )
         spots.add(
             Spot(
                 name = "Fushimi Inari Shrine",
@@ -292,7 +300,13 @@ class SwipeActivity : AppCompatActivity(), CardStackListener {
                 url = "https://source.unsplash.com/NYyCqdBOKwc/600x800"
             )
         )
-        spots.add(Spot(name = "Bamboo Forest", city = "Kyoto", url = "https://source.unsplash.com/buF62ewDLcQ/600x800"))
+        spots.add(
+            Spot(
+                name = "Bamboo Forest",
+                city = "Kyoto",
+                url = "https://source.unsplash.com/buF62ewDLcQ/600x800"
+            )
+        )
         spots.add(
             Spot(
                 name = "Brooklyn Bridge",
@@ -314,9 +328,27 @@ class SwipeActivity : AppCompatActivity(), CardStackListener {
                 url = "https://source.unsplash.com/PeFk7fzxTdk/600x800"
             )
         )
-        spots.add(Spot(name = "Louvre Museum", city = "Paris", url = "https://source.unsplash.com/LrMWHKqilUw/600x800"))
-        spots.add(Spot(name = "Eiffel Tower", city = "Paris", url = "https://source.unsplash.com/HN-5Z6AmxrM/600x800"))
-        spots.add(Spot(name = "Big Ben", city = "London", url = "https://source.unsplash.com/CdVAUADdqEc/600x800"))
+        spots.add(
+            Spot(
+                name = "Louvre Museum",
+                city = "Paris",
+                url = "https://source.unsplash.com/LrMWHKqilUw/600x800"
+            )
+        )
+        spots.add(
+            Spot(
+                name = "Eiffel Tower",
+                city = "Paris",
+                url = "https://source.unsplash.com/HN-5Z6AmxrM/600x800"
+            )
+        )
+        spots.add(
+            Spot(
+                name = "Big Ben",
+                city = "London",
+                url = "https://source.unsplash.com/CdVAUADdqEc/600x800"
+            )
+        )
         spots.add(
             Spot(
                 name = "Great Wall of China",

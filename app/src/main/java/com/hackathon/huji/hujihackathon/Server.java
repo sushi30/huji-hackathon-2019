@@ -6,19 +6,46 @@ import android.arch.lifecycle.MutableLiveData;
 import java.util.ArrayList;
 import java.util.List;
 
-class Server {
+public class Server {
     private static final Server ourInstance = new Server();
 
-    static Server getInstance() {
+    public static Server getInstance() {
         return ourInstance;
     }
 
     private static int id = 0;
 
     private MutableLiveData<List<Group>> suggestedGroups;
+    private MutableLiveData<List<Group>> groupsContainingUser;
 
     private Server() {
-        // should be initialized by calling remote server
+        // should call remote
+        List<Group> containingUser = new ArrayList<>();
+        Group hackathon = new Group("hackathon", String.valueOf(++id));
+        hackathon.addMember(new User("Itamar"));
+        hackathon.addMember(new User("Yuval"));
+        hackathon.addTag("Hackathon");
+        hackathon.addTag("huji");
+        hackathon.addTag("summer");
+        hackathon.addTag("partners");
+        hackathon.addTag("groups");
+        hackathon.addTag("headache");
+
+        Group revenges = new Group("הנוקמים", String.valueOf(++id));
+        revenges.addMember(new User("Tal"));
+        revenges.addMember(new User("Imri"));
+        revenges.addTag("movies");
+        revenges.addTag("marvel");
+
+        containingUser.add(hackathon);
+        containingUser.add(revenges);
+
+        groupsContainingUser = new MutableLiveData<>();
+        groupsContainingUser.setValue(containingUser);
+    }
+
+    public void fetchSuggestedGroups(Group group) {
+        // should call remote api and get the list
         List<Group> suggested = new ArrayList<>();
         Group avengers = new Group("Avengers", String.valueOf(++id), "hackathon", "huji");
         avengers.addMember(new User("Tal"));
@@ -39,11 +66,15 @@ class Server {
         suggestedGroups.postValue(suggested);
     }
 
-    public LiveData<List<Group>> getSuggestedGroups() {
+    public MutableLiveData<List<Group>> getSuggestedGroups() {
         return suggestedGroups;
     }
 
     public void addMember(Group group, User user) {
         group.addMember(user);
+    }
+
+    public LiveData<List<Group>> getGroupsContainingUser() {
+        return groupsContainingUser;
     }
 }

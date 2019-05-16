@@ -22,6 +22,10 @@ public class Group {
         members.add(user);
     }
 
+    public void addTag(String tag){
+        tags.add(tag);
+    }
+
     public String getId() {
         return id;
     }
@@ -37,4 +41,6 @@ public class Group {
     public List<String> getTags() {
         return tags;
     }
+
+
 }

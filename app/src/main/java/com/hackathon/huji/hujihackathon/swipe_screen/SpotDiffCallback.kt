@@ -1,10 +1,11 @@
-package com.hackathon.huji.hujihackathon
+package com.hackathon.huji.hujihackathon.swipe_screen
 
 import android.support.v7.util.DiffUtil
+import com.hackathon.huji.hujihackathon.Group
 
 class SpotDiffCallback(
-        private val old: List<Group>,
-        private val new: List<Group>
+    private val old: List<Group>,
+    private val new: List<Group>
 ) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int {
