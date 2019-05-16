@@ -19,7 +19,7 @@ class CardStackAdapter(
         val inflater = LayoutInflater.from(parent.context)
         return ViewHolder(
             inflater.inflate(
-                R.layout.item_spot,
+                R.layout.item_group,
                 parent,
                 false
             )
