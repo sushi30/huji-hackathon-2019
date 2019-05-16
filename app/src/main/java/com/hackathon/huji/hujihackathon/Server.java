@@ -20,7 +20,7 @@ class Server {
     private Server() {
         // should be initialized by calling remote server
         List<Group> suggested = new ArrayList<>();
-        Group avengers = new Group("Avengers", String.valueOf(++id), "hackathon", "huji");
+        Group avengers = new Group("Avengers", String.valueOf(++id),"https://ichef.bbci.co.uk/news/624/cpsprodpb/BF0D/production/_106090984_2e39b218-c369-452e-b5be-d2476f9d8728.jpg", "hackathon", "huji");
         avengers.addMember(new User("Tal"));
         avengers.addMember(new User("Itay"));
         avengers.addMember(new User("Imri"));

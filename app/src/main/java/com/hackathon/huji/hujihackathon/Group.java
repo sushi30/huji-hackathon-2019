@@ -8,13 +8,15 @@ public class Group {
 
     private String id;
     private String name;
+    private String image;
     private List<User> members;
     private List<String> tags;
 
-    public Group(String groupName, String id, String... tags) {
+    public Group(String groupName, String id, String imageUrl, String... tags) {
         this.id = id;
         name = groupName;
         members = new ArrayList<>();
+        image = imageUrl;
         this.tags = new ArrayList<>(Arrays.asList(tags));
     }
 
@@ -28,6 +30,9 @@ public class Group {
 
     public String getName() {
         return name;
+    }
+    public String getImage() {
+        return image;
     }
 
     public List<User> getMembers() {
