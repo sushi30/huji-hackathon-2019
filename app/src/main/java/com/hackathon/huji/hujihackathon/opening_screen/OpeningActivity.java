@@ -48,7 +48,8 @@ public class OpeningActivity extends AppCompatActivity {
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 CreateGroupFragment fragment = new CreateGroupFragment();
-                fragmentTransaction.add(R.id.create_group_container, fragment);
+                //fragment.show(fragmentManager, "create_group");
+                fragmentTransaction.add(R.id.create_group_container, fragment).addToBackStack("create_group");
                 fragmentTransaction.commit();
             }
         });
@@ -101,7 +102,7 @@ public class OpeningActivity extends AppCompatActivity {
             for (String tag : tags) {
                 TextView textView = new TextView(groupHolder.groupTags.getContext());
                 textView.setTextColor(Color.WHITE);
-                textView.setTextSize(24);
+                textView.setTextSize(18);
                 textView.setPadding(20, 20, 2, 2);
                 String text = "#" + tag;
                 textView.setText(text);
