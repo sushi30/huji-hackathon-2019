@@ -62,7 +62,7 @@ public class Server {
 
         // should call remote
         List<Group> containingUser = new ArrayList<>();
-        Group hackathon = new Group("hackathon", "01e3c72f-c945-4cc1-91e3-61487cba48e6", null);
+        Group hackathon = new Group("hackathon", "01e3c72f-c945-4cc1-91e3-61487cba48e6", ImageGenerator.get());
         hackathon.addMember(new User("Itamar"));
         hackathon.addMember(new User("Yuval"));
         hackathon.addTag("Hackathon");
@@ -72,14 +72,20 @@ public class Server {
         hackathon.addTag("groups");
         hackathon.addTag("headache");
 
-        Group revenges = new Group("הנוקמים", "3008c713-7c80-47c6-9f6b-3d5b53949327", null);
+        Group revenges = new Group("הנוקמים", "3008c713-7c80-47c6-9f6b-3d5b53949327", ImageGenerator.get());
         revenges.addMember(new User("Tal"));
         revenges.addMember(new User("Imri"));
         revenges.addTag("movies");
         revenges.addTag("marvel");
 
+        Group food = new Group("food!!!", "66900df7-1810-4e44-b3a9-3fa1e5af9db3", ImageGenerator.get());
+        food.addMember(new User("Tal"));
+        food.addMember(new User("Imri"));
+        food.addTag("food");
+
         containingUser.add(hackathon);
         containingUser.add(revenges);
+        containingUser.add(food);
 
         groupsContainingUser = new MutableLiveData<>();
         groupsContainingUser.setValue(containingUser);
@@ -122,18 +128,18 @@ public class Server {
             public void run() {
                 final List<Group> suggested = new ArrayList<>();
                 // should call remote api and get the list
-                Group avengers = new Group("Avengers", "123", "https://ichef.bbci.co.uk/news/624/cpsprodpb/BF0D/production/_106090984_2e39b218-c369-452e-b5be-d2476f9d8728.jpg", "hackathon", "huji");
+                Group avengers = new Group("Avengers", "123", ImageGenerator.get(), "hackathon", "huji");
                 avengers.addMember(new User("Tal"));
                 avengers.addMember(new User("Itay"));
                 avengers.addMember(new User("Imri"));
                 suggested.add(avengers);
 
-                Group maccabi = new Group("Maccabi SP", "456", "https://ichef.bbci.co.uk/news/624/cpsprodpb/BF0D/production/_106090984_2e39b218-c369-452e-b5be-d2476f9d8728.jpg", "Basketball", "Sacher_Park");
+                Group maccabi = new Group("Maccabi SP", "456", ImageGenerator.get(), "Basketball", "Sacher_Park");
                 maccabi.addMember(new User("Yuval"));
                 maccabi.addMember(new User("Itamar"));
                 suggested.add(maccabi);
 
-                Group north = new Group("The North Remembers", "789", "https://ichef.bbci.co.uk/news/624/cpsprodpb/BF0D/production/_106090984_2e39b218-c369-452e-b5be-d2476f9d8728.jpg", "dive", "from:jerusalem", "to:tiberias");
+                Group north = new Group("The North Remembers", "789", ImageGenerator.get(), "dive", "from:jerusalem", "to:tiberias");
                 north.addMember(new User("Assaf"));
                 suggested.add(north);
 

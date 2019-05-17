@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.hackathon.huji.hujihackathon.Group
+import com.hackathon.huji.hujihackathon.ImageGenerator
 import com.hackathon.huji.hujihackathon.R
 import me.gujun.android.taggroup.TagGroup
 
@@ -32,7 +33,7 @@ class CardStackAdapter(
         holder.name.text = "${group.name}"
         holder.tags.setTags(*group.tags.toTypedArray())
         Glide.with(holder.image)
-            .load(group.image)
+            .load(ImageGenerator.get())
             .into(holder.image)
         holder.itemView.setOnClickListener { v ->
             Toast.makeText(v.context, group.name, Toast.LENGTH_SHORT).show()
