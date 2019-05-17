@@ -2,11 +2,15 @@ package com.hackathon.huji.hujihackathon;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class Group implements Parcelable {
@@ -55,6 +59,25 @@ public class Group implements Parcelable {
         }
     };
 
+    public Group(JSONObject json, Collection<User> users) {
+        tags = new ArrayList<>();
+        members = new ArrayList<>();
+        try {
+            id = json.getString("id");
+            JSONArray tagsArray = json.getJSONArray("tags");
+            for (int i = 0; i < tagsArray.length(); i++) {
+                tags.add(tagsArray.getString(i));
+            }
+            for (User user : users) {
+                addMember(user);
+            }
+            name = json.getString("name");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public void addMember(User user) {
         members.add(user);
     }
@@ -79,7 +102,7 @@ public class Group implements Parcelable {
         return tags;
     }
 
-    public void addTag(String tag){
+    public void addTag(String tag) {
         tags.add(tag);
     }
 

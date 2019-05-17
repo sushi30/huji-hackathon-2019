@@ -4,27 +4,28 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.util.Log;
-import com.android.volley.*;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.squareup.okhttp.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Server {
     private static final Server ourInstance = new Server();
     private static final String LOG_TAG = "Server";
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    private OkHttpClient client;
 
     public static Server getInstance() {
         return ourInstance;
     }
-
-    private static int id = 0;
 
     private MutableLiveData<List<Group>> suggestedGroups;
     private MutableLiveData<List<Group>> groupsContainingUser;
@@ -32,7 +33,7 @@ public class Server {
     private Server() {
         // should call remote
         List<Group> containingUser = new ArrayList<>();
-        Group hackathon = new Group("hackathon", String.valueOf(++id), null);
+        Group hackathon = new Group("hackathon", "6f419f24-2d6e-4f53-b7c1-252f1b3aa159", null);
         hackathon.addMember(new User("Itamar"));
         hackathon.addMember(new User("Yuval"));
         hackathon.addTag("Hackathon");
@@ -42,7 +43,7 @@ public class Server {
         hackathon.addTag("groups");
         hackathon.addTag("headache");
 
-        Group revenges = new Group("הנוקמים", String.valueOf(++id), null);
+        Group revenges = new Group("הנוקמים", "3a794d61-bb9f-404f-b2fd-529b46ca7b4c", null);
         revenges.addMember(new User("Tal"));
         revenges.addMember(new User("Imri"));
         revenges.addTag("movies");
@@ -53,72 +54,102 @@ public class Server {
 
         groupsContainingUser = new MutableLiveData<>();
         groupsContainingUser.setValue(containingUser);
+        client = new OkHttpClient();
+        suggestedGroups = new MutableLiveData<>();
+        suggestedGroups.setValue(new ArrayList<Group>());
     }
 
-    public void fetchSuggestedGroups(Group group, Context context) {
-        final JSONObject body = new JSONObject();
-        try {
-            body.put("id", 0);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        RequestQueue queue = Volley.newRequestQueue(context);
-        String url = "http://www.google.com";
-        final List<Group> suggested = new ArrayList<>();
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONArray jsonGroups = new JSONArray(response);
-                            Gson gson = new Gson();
-
-                            for (int i = 0; i < jsonGroups.length(); i++) {
-                                Group group = gson.fromJson(jsonGroups.getJSONObject(i).toString(), Group.class);
-                                suggested.add(group);
-                            }
-                        } catch (JSONException e) {
-                            Log.d(LOG_TAG, Arrays.toString(e.getStackTrace()));
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError e) {
+    private List<User> getMembers(List<String> ids) {
+        final List<User> members = new ArrayList<>();
+        for (String id : ids) {
+            Request request = new Request.Builder()
+                    .url("https://0x0dhiy01f.execute-api.us-west-2.amazonaws.com/v1/user?id=" + id).
+                            get().build();
+            Response response = null;
+            try {
+                response = client.newCall(request).execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (response.body() != null) {
+                    String responseBody = response.body().string();
+                    JSONObject jsonUser = new JSONObject(responseBody);
+                    User user = new User(jsonUser);
+                    members.add(user);
+                }
+            } catch (JSONException | IOException e) {
                 Log.d(LOG_TAG, Arrays.toString(e.getStackTrace()));
             }
-        }) {
+        }
+        return members;
+    }
+
+
+    public void fetchSuggestedGroups(final Group userGroup) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+        executorService.execute(new Runnable() {
             @Override
-            public byte[] getBody() throws AuthFailureError {
-                return body.toString().getBytes();
+            public void run() {
+                final List<Group> suggested = new ArrayList<>();
+                // should call remote api and get the list
+                Group avengers = new Group("Avengers", "123", "https://ichef.bbci.co.uk/news/624/cpsprodpb/BF0D/production/_106090984_2e39b218-c369-452e-b5be-d2476f9d8728.jpg", "hackathon", "huji");
+                avengers.addMember(new User("Tal"));
+                avengers.addMember(new User("Itay"));
+                avengers.addMember(new User("Imri"));
+                suggested.add(avengers);
+
+                Group maccabi = new Group("Maccabi SP", "456", "https://ichef.bbci.co.uk/news/624/cpsprodpb/BF0D/production/_106090984_2e39b218-c369-452e-b5be-d2476f9d8728.jpg", "Basketball", "Sacher_Park");
+                maccabi.addMember(new User("Yuval"));
+                maccabi.addMember(new User("Itamar"));
+                suggested.add(maccabi);
+
+                Group north = new Group("The North Remembers", "789", "https://ichef.bbci.co.uk/news/624/cpsprodpb/BF0D/production/_106090984_2e39b218-c369-452e-b5be-d2476f9d8728.jpg", "dive", "from:jerusalem", "to:tiberias");
+                north.addMember(new User("Assaf"));
+                suggested.add(north);
+
+                suggestedGroups.postValue(suggested);
+
+                Request request = new Request.Builder()
+                        .url("https://0x0dhiy01f.execute-api.us-west-2.amazonaws.com/v1/suggest?id=" + userGroup.getId()).
+                                get().build();
+                try {
+                    Response response = client.newCall(request).execute();
+                    String responseBody = response.body().string();
+                    if (responseBody.charAt(0) == '{') {
+                        JSONObject groupJson = new JSONObject(responseBody);
+                        JSONArray idsArray = groupJson.getJSONArray("members");
+                        List<String> ids = JSONArrayToList(idsArray);
+                        List<User> users = getMembers(ids);
+                        Group group = new Group(groupJson, users);
+                        suggested.add(group);
+                    } else {
+                        JSONArray jsonGroups = new JSONArray(response.body().string());
+                        for (int i = 0; i < jsonGroups.length(); i++) {
+                            suggested.add(userGroup);
+                        }
+                    }
+                    Log.d(LOG_TAG, "Returned with suggested groups");
+                    suggestedGroups.postValue(suggested);
+                } catch (JSONException | IOException e) {
+                    Log.d(LOG_TAG, Arrays.toString(e.getStackTrace()));
+                }
             }
+        });
+    }
 
-            @Override
-            public String getBodyContentType() {
-                return "application/json";
+    private List<String> JSONArrayToList(JSONArray array) {
+        List<String> res = new ArrayList<>();
+        try {
+            for (int i = 0; i < array.length(); i++) {
+                res.add(array.getString(i));
             }
-        };
-
-        queue.add(stringRequest);
-
-        // should call remote api and get the list
-        Group avengers = new Group("Avengers", String.valueOf(++id), "https://ichef.bbci.co.uk/news/624/cpsprodpb/BF0D/production/_106090984_2e39b218-c369-452e-b5be-d2476f9d8728.jpg", "hackathon", "huji");
-        avengers.addMember(new User("Tal"));
-        avengers.addMember(new User("Itay"));
-        avengers.addMember(new User("Imri"));
-        suggested.add(avengers);
-
-        Group maccabi = new Group("Maccabi SP", String.valueOf(++id), "https://ichef.bbci.co.uk/news/624/cpsprodpb/BF0D/production/_106090984_2e39b218-c369-452e-b5be-d2476f9d8728.jpg", "Basketball", "Sacher_Park");
-        maccabi.addMember(new User("Yuval"));
-        maccabi.addMember(new User("Itamar"));
-        suggested.add(maccabi);
-
-        Group north = new Group("The North Remembers", String.valueOf(++id), "https://ichef.bbci.co.uk/news/624/cpsprodpb/BF0D/production/_106090984_2e39b218-c369-452e-b5be-d2476f9d8728.jpg", "dive", "from:jerusalem", "to:tiberias");
-        north.addMember(new User("Assaf"));
-        suggested.add(north);
-
-        suggestedGroups = new MutableLiveData<>();
-        suggestedGroups.postValue(suggested);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return res;
     }
 
     public MutableLiveData<List<Group>> getSuggestedGroups() {

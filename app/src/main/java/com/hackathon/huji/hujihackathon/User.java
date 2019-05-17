@@ -3,6 +3,8 @@ package com.hackathon.huji.hujihackathon;
 import android.os.Parcel;
 import android.os.Parcelable;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class User implements Parcelable {
 
@@ -13,9 +15,22 @@ public class User implements Parcelable {
     private String picture;
 
     public User(String name) {
-        this.id = String.valueOf(++ids);
+        this.id = String.valueOf(ids++);
         this.name = name;
-//        this.picture = picture;
+    }
+
+    public User(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public User(JSONObject json) {
+        try {
+            this.id = json.getString("id");
+            this.name = json.getString("name");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private User(@NotNull Parcel in) {
