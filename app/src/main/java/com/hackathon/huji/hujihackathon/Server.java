@@ -53,7 +53,7 @@ public class Server {
                         .build();
                 try {
                     Response response = client.newCall(request).execute();
-                    id = response.body().string();
+                    id = response.body().string().replaceAll("\"", "");
                 } catch (Exception e) {
                     Log.d(LOG_TAG, Arrays.toString(e.getStackTrace()));
                 }
@@ -205,10 +205,14 @@ public class Server {
                 }
                 builder.append("\"").append(group.getTags().get(group.getTags().size() - 1)).append("\"");
 
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("members", "[" + id + "]");
-                jsonObject.addProperty("tags", "[" + builder.toString() + "]");
-                jsonObject.addProperty("name", group.getName());
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("members", new JSONArray(new String[]{id}));
+                    jsonObject.put("tags", new JSONArray(group.getTags()));
+                    jsonObject.put("name", group.getName());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
                 MediaType JSON = MediaType.parse("application/json; charset=utf-8");
                 RequestBody body = RequestBody.create(JSON, jsonObject.toString());
