@@ -39,7 +39,7 @@ class SwipeActivity : AppCompatActivity(), CardStackListener {
         setupButton()
         model.suggestedGroups.observe(this, Observer<List<Group>> { groups ->
             if (groups != null) {
-                adapter.setGroups(groups)
+                adapter.addGroups(groups)
             }
         })
 

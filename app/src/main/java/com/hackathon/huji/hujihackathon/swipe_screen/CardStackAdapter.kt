@@ -47,6 +47,10 @@ class CardStackAdapter(
         this.groups = spots
     }
 
+    fun addGroups(inGroups: List<Group>) {
+        inGroups.forEach { g -> groups = groups + g }
+    }
+
     fun getGroups(): List<Group> {
         return groups
     }

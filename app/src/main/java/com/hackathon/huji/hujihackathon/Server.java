@@ -33,7 +33,7 @@ public class Server {
     private Server() {
         // should call remote
         List<Group> containingUser = new ArrayList<>();
-        Group hackathon = new Group("hackathon", "6f419f24-2d6e-4f53-b7c1-252f1b3aa159", null);
+        Group hackathon = new Group("hackathon", "01e3c72f-c945-4cc1-91e3-61487cba48e6", null);
         hackathon.addMember(new User("Itamar"));
         hackathon.addMember(new User("Yuval"));
         hackathon.addTag("Hackathon");
@@ -43,7 +43,7 @@ public class Server {
         hackathon.addTag("groups");
         hackathon.addTag("headache");
 
-        Group revenges = new Group("הנוקמים", "3a794d61-bb9f-404f-b2fd-529b46ca7b4c", null);
+        Group revenges = new Group("הנוקמים", "3008c713-7c80-47c6-9f6b-3d5b53949327", null);
         revenges.addMember(new User("Tal"));
         revenges.addMember(new User("Imri"));
         revenges.addTag("movies");
@@ -125,9 +125,14 @@ public class Server {
                         Group group = new Group(groupJson, users);
                         suggested.add(group);
                     } else {
-                        JSONArray jsonGroups = new JSONArray(response.body().string());
+                        JSONArray jsonGroups = new JSONArray(responseBody);
                         for (int i = 0; i < jsonGroups.length(); i++) {
-                            suggested.add(userGroup);
+                            JSONObject groupJson = jsonGroups.getJSONObject(i);
+                            JSONArray idsArray = groupJson.getJSONArray("members");
+                            List<String> ids = JSONArrayToList(idsArray);
+                            List<User> users = getMembers(ids);
+                            Group group = new Group(groupJson, users);
+                            suggested.add(group);
                         }
                     }
                     Log.d(LOG_TAG, "Returned with suggested groups");
