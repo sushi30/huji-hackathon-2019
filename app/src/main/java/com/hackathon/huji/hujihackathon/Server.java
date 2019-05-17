@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.util.Log;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.squareup.okhttp.*;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,7 +24,9 @@ public class Server {
     private static final Server ourInstance = new Server();
     private static final String LOG_TAG = "Server";
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    private OkHttpClient client;
+    private OkHttpClient client = new OkHttpClient();
+
+    private static String id;
 
     public static Server getInstance() {
         return ourInstance;
@@ -33,6 +36,30 @@ public class Server {
     private MutableLiveData<List<Group>> groupsContainingUser;
 
     private Server() {
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                JsonObject json = new JsonObject();
+                json.addProperty("name", "Tal");
+                json.addProperty("age", "27");
+
+                MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+                RequestBody body = RequestBody.create(JSON, json.toString());
+
+                Request request = new Request.Builder()
+                        .url("https://0x0dhiy01f.execute-api.us-west-2.amazonaws.com/v1/new").
+                                post(body)
+                        .build();
+                try {
+                    Response response = client.newCall(request).execute();
+                    id = response.body().string();
+                } catch (Exception e) {
+                    Log.d(LOG_TAG, Arrays.toString(e.getStackTrace()));
+                }
+            }
+        });
+
         // should call remote
         List<Group> containingUser = new ArrayList<>();
         Group hackathon = new Group("hackathon", "01e3c72f-c945-4cc1-91e3-61487cba48e6", null);
@@ -56,7 +83,6 @@ public class Server {
 
         groupsContainingUser = new MutableLiveData<>();
         groupsContainingUser.setValue(containingUser);
-        client = new OkHttpClient();
         suggestedGroups = new MutableLiveData<>();
         suggestedGroups.setValue(new ArrayList<Group>());
     }
@@ -115,7 +141,7 @@ public class Server {
                 suggested.clear();
 
                 Request request = new Request.Builder()
-                        .url("https://0x0dhiy01f.execute-api.us-west-2.amazonaws.com/v1/suggest?id=" + userGroup.getId()).
+                        .url("https://0x0dhiy01f.execute-api.us-west-2.amazonaws.com/v1/suggests?id=" + userGroup.getId()).
                                 get().build();
                 try {
                     Response response = client.newCall(request).execute();
@@ -164,11 +190,41 @@ public class Server {
         return suggestedGroups;
     }
 
-    public void createGroup(Group group){
-        List<Group> groups = groupsContainingUser.getValue();
+    public void createGroup(final Group group) {
+        final List<Group> groups = groupsContainingUser.getValue();
         if (groups == null) return;
         groups.add(group);
         groupsContainingUser.postValue(groups);
+
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < group.getTags().size() - 1; i++) {
+                    builder.append("\"").append(group.getTags().get(i)).append("\"").append(",");
+                }
+                builder.append("\"").append(group.getTags().get(group.getTags().size() - 1)).append("\"");
+
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("members", "[" + id + "]");
+                jsonObject.addProperty("tags", "[" + builder.toString() + "]");
+                jsonObject.addProperty("name", group.getName());
+
+                MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+                RequestBody body = RequestBody.create(JSON, jsonObject.toString());
+
+                Request request = new Request.Builder()
+                        .url("https://0x0dhiy01f.execute-api.us-west-2.amazonaws.com/v1/game")
+                        .post(body)
+                        .build();
+                try {
+                    Response response = client.newCall(request).execute();
+                    System.out.println(response.body().string());
+                } catch (Exception e) {
+                    Log.d(LOG_TAG, Arrays.toString(e.getStackTrace()));
+                }
+            }
+        });
     }
 
     public LiveData<List<Group>> getGroupsContainingUser() {
