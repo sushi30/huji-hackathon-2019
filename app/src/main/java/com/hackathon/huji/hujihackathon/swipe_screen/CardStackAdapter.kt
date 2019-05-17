@@ -49,10 +49,7 @@ class CardStackAdapter(
 
     fun addGroups(inGroups: List<Group>) {
         inGroups.forEach { g -> groups += g }
-    }
-
-    fun addGroups(inGroups: List<Group>) {
-        inGroups.forEach { g -> groups = groups + g }
+        notifyDataSetChanged();
     }
 
     fun getGroups(): List<Group> {

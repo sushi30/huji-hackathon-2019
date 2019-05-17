@@ -11,8 +11,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -109,7 +111,7 @@ public class Server {
                 north.addMember(new User("Assaf"));
                 suggested.add(north);
 
-                suggestedGroups.postValue(suggested);
+                suggestedGroups.postValue(new ArrayList<>(suggested));
                 suggested.clear();
 
                 Request request = new Request.Builder()
