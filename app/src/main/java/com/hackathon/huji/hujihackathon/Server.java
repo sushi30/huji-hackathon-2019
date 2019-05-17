@@ -229,7 +229,8 @@ public class Server {
                         .build();
                 try {
                     Response response = client.newCall(request).execute();
-                    System.out.println(response.body().string());
+                    String id = response.body().string().replaceAll("\"", "");
+                    group.setId(id);
                 } catch (Exception e) {
                     Log.d(LOG_TAG, Arrays.toString(e.getStackTrace()));
                 }

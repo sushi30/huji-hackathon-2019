@@ -126,4 +126,8 @@ public class Group implements Parcelable {
         dest.writeString(image);
 
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }
