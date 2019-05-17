@@ -96,18 +96,18 @@ public class Server {
             public void run() {
                 final List<Group> suggested = new ArrayList<>();
                 // should call remote api and get the list
-                Group avengers = new Group("Avengers", "123", "http://imrisbucket.s3-website-us-west-2.amazonaws.com/1.jpeg", "hackathon", "huji");
+                Group avengers = new Group("Avengers", "123", "http://imrisbucket.s3-website-us-west-2.amazonaws.com/1.jpg", "hackathon", "huji");
                 avengers.addMember(new User("Tal"));
                 avengers.addMember(new User("Itay"));
                 avengers.addMember(new User("Imri"));
                 suggested.add(avengers);
 
-                Group maccabi = new Group("Maccabi SP", "456", "http://imrisbucket.s3-website-us-west-2.amazonaws.com/2.jpeg", "Basketball", "Sacher_Park");
+                Group maccabi = new Group("Maccabi SP", "456", "http://imrisbucket.s3-website-us-west-2.amazonaws.com/2.jpg", "Basketball", "Sacher_Park");
                 maccabi.addMember(new User("Yuval"));
                 maccabi.addMember(new User("Itamar"));
                 suggested.add(maccabi);
 
-                Group north = new Group("The North Remembers", "789", "http://imrisbucket.s3-website-us-west-2.amazonaws.com/3.jpeg", "dive", "from:jerusalem", "to:tiberias");
+                Group north = new Group("The North Remembers", "789", "http://imrisbucket.s3-website-us-west-2.amazonaws.com/3.jpg", "dive", "from:jerusalem", "to:tiberias");
                 north.addMember(new User("Assaf"));
                 suggested.add(north);
 
