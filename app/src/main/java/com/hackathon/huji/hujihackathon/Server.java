@@ -110,6 +110,7 @@ public class Server {
                 suggested.add(north);
 
                 suggestedGroups.postValue(suggested);
+                suggested.clear();
 
                 Request request = new Request.Builder()
                         .url("https://0x0dhiy01f.execute-api.us-west-2.amazonaws.com/v1/suggest?id=" + userGroup.getId()).
